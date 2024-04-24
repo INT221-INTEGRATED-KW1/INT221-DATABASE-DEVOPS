@@ -1,1 +1,0 @@
-docker compose stop database frontend backend && docker compose rm database frontend backend
