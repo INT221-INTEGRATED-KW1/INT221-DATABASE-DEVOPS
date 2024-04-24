@@ -4,6 +4,10 @@ services:
     build: ./front-end
     ports:
       - "3000:80"
+    volumes:
+      - type: bind
+        source: ./front-end/dist
+        target: /usr/share/nginx/html
 
   backend:
     build: ./back-end
