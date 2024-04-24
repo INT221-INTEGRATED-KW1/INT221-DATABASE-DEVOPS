@@ -2,6 +2,7 @@ version: "3.8"
 services:
   frontend:
     build: ./frontend
+    restart: always
     ports:
       - "3000:80"
     volumes:
@@ -11,15 +12,18 @@ services:
 
   backend:
     build: ./backend
+    restart: always
     ports:
       - "8080:8080"
     volumes:
-      - ./backend/target/temp.jar:/temp.jar
+      - ./backend/INT221-BACKEND/target/kanbanborad-0.0.1-SNAPSHOT.jar:/deploy.jar
 
   database:
     build: ./database
     ports:
       - "3306:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
     environment:
       MYSQL_USER: 'root'
       MYSQL_PASSWORD: 'admin@kw1'
