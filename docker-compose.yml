@@ -1,0 +1,22 @@
+version: "3.8"
+services:
+  frontend:
+    build: ./front-end
+    ports:
+      - "3000:80"
+
+  backend:
+    build: ./back-end
+    ports:
+      - "8080:8080"
+
+  database:
+    build: ./database
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_USER: 'root'
+      MYSQL_PASSWORD: 'admin@kw1'
+      MYSQL_ROOT_PASSWORD: 'admin@kw1'
+    volumes:
+      - ./database/kanbanboard.sql:/kanbanboard.sql
