@@ -18,6 +18,8 @@ CREATE TABLE tasks (
     CHECK (assignees <> '')
 );
 
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+
 insert into tasks (title, description, assignees, status)
 values ("TaskTitle1TaskTitle2TaskTitle3TaskTitle4TaskTitle5TaskTitle6TaskTitle7TaskTitle8TaskTitle9TaskTitle0", 
 'Descripti1Descripti2Descripti3Descripti4Descripti5Descripti6Descripti7Descripti8Descripti9Descripti1Descripti1Descripti2Descripti3Descripti4Descripti5Descripti6Descripti7Descripti8Descripti9Descripti2Descripti1Descripti2Descripti3Descripti4Descripti5Descripti6Descripti7Descripti8Descripti9Descripti3Descripti1Descripti2Descripti3Descripti4Descripti5Descripti6Descripti7Descripti8Descripti9Descripti4Descripti1Descripti2Descripti3Descripti4Descripti5Descripti6Descripti7Descripti8Descripti9Descripti5', 
@@ -31,5 +33,3 @@ values ("ดาต้าเบส", 'ສ້າງຖານຂໍ້ມູນ', '
 
 insert into tasks (title, description, assignees, status)
 values ("_Infrastructure_", '_Setup containers_', 'ไก่งวง กับ เพนกวิน', "DONE");
-
-grant all privileges on *.* to 'root'@'%';

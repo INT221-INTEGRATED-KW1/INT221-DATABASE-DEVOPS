@@ -1,4 +1,4 @@
-version: "3.8"
+version: "3"
 services:
   frontend:
     build: ./frontend
@@ -9,6 +9,8 @@ services:
       - type: bind
         source: ./frontend/dist
         target: /usr/share/nginx/html
+    networks:
+      - default
 
   backend:
     build: ./backend
@@ -16,7 +18,13 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./backend/target/deploy.jar:/deploy.jar
+      - ./backend/target/deploy.jar:/app/deploy.jar
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/kanbanboard?serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: admin@kw1
+    networks:
+      - default
 
   database:
     build: ./database
@@ -30,3 +38,9 @@ services:
       MYSQL_ROOT_PASSWORD: 'admin@kw1'
     volumes:
       - ./database/kanbanboard.sql:/kanbanboard.sql
+    networks:
+      - default
+
+networks:
+  default:
+    driver: bridge

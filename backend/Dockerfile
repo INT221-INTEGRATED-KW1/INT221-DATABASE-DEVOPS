@@ -1,3 +1,3 @@
-FROM openjdk:17-jdk-alpine
+FROM maven:3-openjdk-17
 
-ENTRYPOINT [ "java", "-jar", "/deploy.jar" ]
+ENTRYPOINT ["java", "-jar", "/app/deploy.jar"]
