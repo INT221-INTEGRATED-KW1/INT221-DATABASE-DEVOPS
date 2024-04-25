@@ -32,3 +32,4 @@ values ("ดาต้าเบส", 'ສ້າງຖານຂໍ້ມູນ', '
 insert into tasks (title, description, assignees, status)
 values ("_Infrastructure_", '_Setup containers_', 'ไก่งวง กับ เพนกวิน', "DONE");
 
+grant all privileges on *.* to 'root'@'%';
