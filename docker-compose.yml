@@ -16,7 +16,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./backend/INT221-BACKEND/target/kanbanborad-0.0.1-SNAPSHOT.jar:/deploy.jar
+      - ./backend/target/deploy.jar:/deploy.jar
 
   database:
     build: ./database
