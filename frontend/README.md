@@ -1,0 +1,1 @@
+## Store "dist" directories after build from frontend site.

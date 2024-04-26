@@ -1,7 +1,7 @@
 version: "3"
 services:
   frontend:
-    build: ./frontend
+    image: nginx:alpine
     restart: always
     ports:
       - "3000:80"
@@ -9,38 +9,44 @@ services:
       - type: bind
         source: ./frontend/dist
         target: /usr/share/nginx/html
+    environment:
+      TZ: "UTC"
     networks:
-      - default
+      - service_link
 
   backend:
-    build: ./backend
+    image: maven:3-openjdk-17
     restart: always
     ports:
       - "8080:8080"
     volumes:
       - ./backend/target/deploy.jar:/app/deploy.jar
     environment:
+      TZ: "UTC"
       SPRING_DATASOURCE_URL: jdbc:mysql://database:3306/kanbanboard?serverTimezone=UTC
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: admin@kw1
+    entrypoint: ["java", "-jar", "/app/deploy.jar"]
     networks:
-      - default
+      - service_link
 
   database:
-    build: ./database
+    image: mysql/mysql-server:8.0
+    restart: always
     ports:
       - "3306:3306"
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
     environment:
+      TZ: "UTC"
       MYSQL_USER: 'root'
       MYSQL_PASSWORD: 'admin@kw1'
       MYSQL_ROOT_PASSWORD: 'admin@kw1'
+      LANG: C.UTF-8
     volumes:
-      - ./database/kanbanboard.sql:/kanbanboard.sql
+      - ./database/kanbanboard.sql:/docker-entrypoint-initdb.d/kanbanboard.sql
+    command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
     networks:
-      - default
+      - service_link
 
 networks:
-  default:
+  service_link:
     driver: bridge
