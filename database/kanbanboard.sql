@@ -1,3 +1,5 @@
+DROP DATABASE IF EXISTS kanbanboard;
+
 CREATE DATABASE kanbanboard;
 
 SET GLOBAL time_zone = '+00:00';
@@ -19,8 +21,6 @@ CREATE TABLE tasks (
     CHECK (description <> ''),
     CHECK (assignees <> '')
 );
-
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
 
 INSERT INTO tasks (title, description, assignees, status, createdOn, updatedOn)
 VALUES (
@@ -61,3 +61,4 @@ VALUES (
     '2024-04-22 09:15:00', 
     '2024-04-22 10:00:00'
 );
+SELECT @@global.time_zone;
