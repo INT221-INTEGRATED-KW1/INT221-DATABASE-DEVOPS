@@ -22,6 +22,8 @@ CREATE TABLE tasks (
     CHECK (assignees <> '')
 );
 
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+
 INSERT INTO tasks (title, description, assignees, status, createdOn, updatedOn)
 VALUES (
     'TaskTitle1TaskTitle2TaskTitle3TaskTitle4TaskTitle5TaskTitle6TaskTitle7TaskTitle8TaskTitle9TaskTitle0', 
