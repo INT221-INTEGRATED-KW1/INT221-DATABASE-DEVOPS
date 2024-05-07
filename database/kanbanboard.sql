@@ -39,7 +39,7 @@ VALUES (
     'Repository', 
     NULL, 
     NULL, 
-    'TODO', 
+    'TO_DO',
     '2024-04-22 09:05:00', 
     '2024-04-22 14:00:00'
 );
