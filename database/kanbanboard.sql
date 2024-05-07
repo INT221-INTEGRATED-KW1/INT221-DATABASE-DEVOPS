@@ -13,7 +13,7 @@ CREATE TABLE tasks (
     title VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
     description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
     assignees varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-    status ENUM('NO_STATUS', 'TODO', 'DOING', 'DONE') NOT NULL DEFAULT 'NO_STATUS',
+    status ENUM('NO_STATUS', 'TO_DO', 'DOING', 'DONE') NOT NULL DEFAULT 'NO_STATUS',
     createdOn datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updatedOn datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE NOW() NOT NULL,
     CHECK (CHAR_LENGTH(description) <= 500),
