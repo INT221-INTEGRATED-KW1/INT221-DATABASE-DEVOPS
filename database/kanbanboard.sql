@@ -1,3 +1,4 @@
+
 DROP DATABASE IF EXISTS kanbanboard;
 
 CREATE DATABASE kanbanboard;
@@ -6,62 +7,82 @@ SET GLOBAL time_zone = '+00:00';
 
 USE kanbanboard;
 
+DROP TABLE IF exists status;
 DROP TABLE IF exists tasks;
-
-CREATE TABLE tasks (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-    description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-    assignees varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
-    status ENUM('NO_STATUS', 'TO_DO', 'DOING', 'DONE') NOT NULL DEFAULT 'NO_STATUS',
-    createdOn datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    updatedOn datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE NOW() NOT NULL,
-    CHECK (CHAR_LENGTH(description) <= 500),
-    CHECK (title <> ''),
-    CHECK (description <> ''),
-    CHECK (assignees <> '')
-);
 
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
 
-INSERT INTO tasks (title, description, assignees, status, createdOn, updatedOn)
+CREATE TABLE status (
+  status_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE,
+  description VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  color VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  CHECK (name <> ''),
+  CHECK (description <> ''),
+  CHECK (color <> '')
+);
+
+CREATE TABLE tasks (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  title VARCHAR(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  description TEXT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  assignees VARCHAR(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  status_id INT NOT NULL,
+  createdOn DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updatedOn DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE NOW() NOT NULL,
+  INDEX `fk_tasks_status_idx` (`status_id` ASC) VISIBLE,
+  CONSTRAINT `fk_tasks_status`
+    FOREIGN KEY (`status_id`)
+    REFERENCES `status` (`status_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CHECK (CHAR_LENGTH(description) <= 500),
+  CHECK (title <> ''),
+  CHECK (description <> ''),
+  CHECK (assignees <> '')
+);
+
+INSERT INTO `status` (`status_id`, `name`, `color`) VALUES (1, 'NO_STATUS', 'gray');
+INSERT INTO `status` (`status_id`, `name`, `color`) VALUES (2, 'TO_DO', 'orange');
+INSERT INTO `status` (`status_id`, `name`, `color`) VALUES (3, 'DOING', 'blue');
+INSERT INTO `status` (`status_id`, `name`, `color`) VALUES (4, 'DONE', 'green');
+
+INSERT INTO tasks (title, description, assignees, status_id, createdOn, updatedOn)
 VALUES (
     'TaskTitle1TaskTitle2TaskTitle3TaskTitle4TaskTitle5TaskTitle6TaskTitle7TaskTitle8TaskTitle9TaskTitle0', 
     'Descripti1Descripti2Descripti3Descripti4Descripti5Descripti6Descripti7Descripti8Descripti9Descripti1Descripti1Descripti2Descripti3Descripti4Descripti5Descripti6Descripti7Descripti8Descripti9Descripti2Descripti1Descripti2Descripti3Descripti4Descripti5Descripti6Descripti7Descripti8Descripti9Descripti3Descripti1Descripti2Descripti3Descripti4Descripti5Descripti6Descripti7Descripti8Descripti9Descripti4Descripti1Descripti2Descripti3Descripti4Descripti5Descripti6Descripti7Descripti8Descripti9Descripti5', 
     'Assignees1Assignees2Assignees3', 
-    'NO_STATUS', 
+    1, 
     '2024-04-22 09:00:00', 
     '2024-04-22 09:00:00'
 );
 
-INSERT INTO tasks (title, description, assignees, status, createdOn, updatedOn)
+INSERT INTO tasks (title, description, assignees, status_id, createdOn, updatedOn)
 VALUES (
     'Repository', 
     NULL, 
     NULL, 
-    'TO_DO',
+    2,
     '2024-04-22 09:05:00', 
     '2024-04-22 14:00:00'
 );
 
-INSERT INTO tasks (title, description, assignees, status, createdOn, updatedOn)
+INSERT INTO tasks (title, description, assignees, status_id, createdOn, updatedOn)
 VALUES (
     'ดาต้าเบส', 
     'ສ້າງຖານຂໍ້ມູນ', 
     'あなた、彼、彼女 (私ではありません)', 
-    'DOING', 
+    3, 
     '2024-04-22 09:10:00', 
     '2024-04-25 00:00:00'
 );
 
-INSERT INTO tasks (title, description, assignees, status, createdOn, updatedOn)
+INSERT INTO tasks (title, description, assignees, status_id, createdOn, updatedOn)
 VALUES (
-    '     _Infrastructure_     ', 
-    '     _Setup containers_     ', 
+    '_Infrastructure_ ', 
+    ' _Setup containers_', 
     'ไก่งวง กับ เพนกวิน', 
-    'DONE', 
+    4, 
     '2024-04-22 09:15:00', 
     '2024-04-22 10:00:00'
 );
-
-SELECT @@global. time_zone
