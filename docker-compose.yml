@@ -10,8 +10,13 @@ services:
       - ./frontend/default.conf:/etc/nginx/conf.d/default.conf
     environment:
       TZ: "UTC"
-    networks:
-      - backbase_link
+
+  # tester:
+  #   build: ./tester
+  #   restart: always
+  #   ports:
+  #     - "3000:3000"
+  #   entrypoint: ["npx", "cypress", "run"]
 
   backend:
     image: maven:3-openjdk-17
