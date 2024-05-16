@@ -11,13 +11,6 @@ services:
     environment:
       TZ: "UTC"
 
-  # tester:
-  #   build: ./tester
-  #   restart: always
-  #   ports:
-  #     - "3000:3000"
-  #   entrypoint: ["npx", "cypress", "run"]
-
   backend:
     image: maven:3-openjdk-17
     restart: always
@@ -50,6 +43,13 @@ services:
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
     networks:
       - backbase_link
+
+    # tester:
+    #   build: ./tester
+    #   restart: always
+    #   ports:
+    #     - "3000:3000"
+    #   entrypoint: ["npx", "cypress", "run"]
 
 networks:
   backbase_link:

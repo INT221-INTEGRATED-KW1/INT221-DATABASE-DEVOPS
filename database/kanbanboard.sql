@@ -15,6 +15,7 @@ CREATE TABLE status (
   status_id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE,
   description VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  limitMaximumTask boolean default false,
   color VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   CHECK (name <> ''),
   CHECK (description <> ''),
@@ -41,10 +42,10 @@ CREATE TABLE tasks (
   CHECK (assignees <> '')
 );
 
-INSERT INTO `status` (`status_id`, `name`, `description`,`color`) VALUES (1, 'No Status', 'The default status','gray');
-INSERT INTO `status` (`status_id`, `name`, `description`,`color`) VALUES (2, 'To Do', null,'orange');
-INSERT INTO `status` (`status_id`, `name`, `description`, `color`) VALUES (3, 'Doing', 'Being worked on', 'blue');
-INSERT INTO `status` (`status_id`, `name`, `description`, `color`) VALUES (4, 'Done', 'Finished','green');
+INSERT INTO `status` (`status_id`, `name`, `description`,`limitMaximumTask`,`color`) VALUES (1, 'No Status', 'The default status', false,'gray');
+INSERT INTO `status` (`status_id`, `name`, `description`,`limitMaximumTask`,`color`) VALUES (2, 'To Do', null, false,'orange');
+INSERT INTO `status` (`status_id`, `name`, `description`,`limitMaximumTask`, `color`) VALUES (3, 'Doing', 'Being worked on', false,'blue');
+INSERT INTO `status` (`status_id`, `name`, `description`,`limitMaximumTask`, `color`) VALUES (4, 'Done', 'Finished', false,'green');
 
 
 INSERT INTO tasks (title, description, assignees, status_id, createdOn, updatedOn)
