@@ -55,7 +55,7 @@ VALUES
   (4, 'Reviewing', 'orange', 'The task is being reviewed'),
   (5, 'Testing', 'amber', 'The task is being tested'),
   (6, 'Waiting', 'amber', 'The task is waiting for a resource'),
-  (7, '​Done', 'amber', 'The task has been completed');
+  (7, 'Done', 'amber', 'The task has been completed');
 
 INSERT INTO tasks (title, description, assignees, status_id, createdOn, updatedOn)
 VALUES
