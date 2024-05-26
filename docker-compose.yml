@@ -24,6 +24,9 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: "${TOKEN}"
     entrypoint: ["java", "-jar", "/app/deploy.jar"]
+    depends_on:
+      database:
+        condition: service_healthy
     networks:
       - backbase_link
 
@@ -53,4 +56,3 @@ services:
 
 networks:
   backbase_link:
-    driver: bridge
