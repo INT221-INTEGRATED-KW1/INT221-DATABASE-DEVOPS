@@ -18,7 +18,7 @@ services:
     environment:
       TZ: "UTC"
       SPRING_DATASOURCE_URL: "jdbc:mysql://database:3306/kanbanboard?serverTimezone=UTC"
-      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_USERNAME: "${AUTHEN}"
       SPRING_DATASOURCE_PASSWORD: "${TOKEN}"
     entrypoint: ["java", "-jar", "/app/deploy.jar"]
     depends_on:
@@ -34,7 +34,7 @@ services:
       - "3306:3306"
     environment:
       TZ: "UTC"
-      MYSQL_USER: "root"
+      MYSQL_USER: "${AUTHEN}"
       MYSQL_PASSWORD: "${TOKEN}"
       MYSQL_ROOT_PASSWORD: "${TOKEN}"
       LANG: C.UTF-8
