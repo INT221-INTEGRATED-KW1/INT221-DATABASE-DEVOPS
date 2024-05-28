@@ -10,7 +10,7 @@ DROP TABLE IF exists status;
 DROP TABLE IF exists tasks;
 DROP TABLE IF exists statusLimit;
 
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+GRANT ALL PRIVILEGES ON kanbanboard.* TO 'root'@'%' WITH GRANT OPTION;
 
 CREATE TABLE status (
   status_id INT AUTO_INCREMENT PRIMARY KEY,
