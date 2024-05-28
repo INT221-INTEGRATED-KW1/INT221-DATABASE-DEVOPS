@@ -8,10 +8,7 @@ elif [ $1 = "deploy" ]; then
     if [ $2 = "backend" ]; then
         mv /home/monthon/INT221-BACKEND/target/kanbanborad-0.0.1-SNAPSHOT.jar /home/sysadmin/group-compose/backend/target/deploy.jar
     elif [ $2 = "frontend" ]; then
-        mv /home/chanachai/INT221-FRONTEND/dist/ /home/sysadmin/group-compose/frontend/
-    elif [ $2 = "tester" ]; then
-        mkdir ./tester/src-fe
-        cp -r /home/chanachai/INT221-FRONTEND/* /home/sysadmin/group-compose/tester/src-fe/
+        mv /home/chanachai/INT221-FRONTEND/* /home/sysadmin/group-compose/frontend/src/
     else
         echo "backend - move .jar file to dedplot site."
         echo "frontend - move "dist" to deploy site."
