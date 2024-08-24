@@ -17,9 +17,9 @@ services:
       - ./backend/target/deploy.jar:/app/deploy.jar
     environment:
       TZ: "UTC"
-      SPRING_DATASOURCE_URL: "jdbc:mysql://database:3306/kanbanboard?serverTimezone=UTC"
-      SPRING_DATASOURCE_USERNAME: "${AUTHEN}"
-      SPRING_DATASOURCE_PASSWORD: "${TOKEN}"
+      SPRING_DATASOURCE_kanbanboard_URL: "jdbc:mysql://database:3306/kanbanboard?serverTimezone=UTC"
+      SPRING_DATASOURCE_kanbanboard_USERNAME: "${AUTHEN}"
+      SPRING_DATASOURCE_kanbanboard_PASSWORD: "${TOKEN}"
     entrypoint: ["java", "-jar", "/app/deploy.jar"]
     depends_on:
       database:
