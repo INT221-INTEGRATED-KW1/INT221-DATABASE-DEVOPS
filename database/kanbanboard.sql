@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS `boards` (
 
 CREATE TABLE status (
   status_id INT AUTO_INCREMENT PRIMARY KEY,
-  name VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL UNIQUE,
+  name VARCHAR(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   description VARCHAR(500) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   color VARCHAR(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   board_id VARCHAR(10) NOT NULL,
