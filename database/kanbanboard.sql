@@ -9,15 +9,18 @@ USE kanbanboard;
 DROP TABLE IF exists status;
 DROP TABLE IF exists tasks;
 DROP TABLE IF exists boards;
-
-GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+DROP TABLE IF exists refresh_token;
 
 CREATE TABLE IF NOT EXISTS `boards` (
   `board_id` VARCHAR(10) NOT NULL UNIQUE,
   `oid` VARCHAR(36) NOT NULL,
   `board_name` VARCHAR(120) NOT NULL,
   limitMaximumStatus BOOLEAN DEFAULT FALSE,
-  PRIMARY KEY (`board_id`)) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+  visibility VARCHAR(10) DEFAULT "private",
+  PRIMARY KEY (`board_id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE status (
   status_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -34,7 +37,9 @@ CREATE TABLE status (
   CHECK (name <> ''),
   CHECK (description <> ''),
   CHECK (color <> '')
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE tasks (
   id INT AUTO_INCREMENT PRIMARY KEY,
@@ -61,16 +66,29 @@ CREATE TABLE tasks (
   CHECK (title <> ''),
   CHECK (description <> ''),
   CHECK (assignees <> '')
-) ENGINE = InnoDB DEFAULT CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-INSERT INTO boards (board_id, oid, board_name, limitMaximumStatus) VALUES
-('JzTmVqCnyT', '2b2f94fd-68be-4ff2-8c67-cb35e139f6fb','job list', FALSE),
-('9hZkPj2sBw', '995a830b-6c62-45e6-ab89-1077dff55a72','home work', FALSE);
+CREATE TABLE IF NOT EXISTS `refresh_token` (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  `token` VARCHAR(255) NOT NULL,
+  `oid` VARCHAR(36) NOT NULL,
+  `exp` VARCHAR(36) NOT NULL,
+  INDEX (`oid`)
+)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
+INSERT INTO boards (board_id, oid, board_name) VALUES
+('JzTmVqCnyT', '2b2f94fd-68be-4ff2-8c67-cb35e139f6fb','job list'),
+('9hZkPj2sBw', '995a830b-6c62-45e6-ab89-1077dff55a72','home work');
 
 INSERT INTO `status` (`name`, `description`,`color`, board_id) VALUES ('No Status', 'The default status','gray', 'JzTmVqCnyT');
 INSERT INTO `status` (`name`, `description`,`color`, board_id) VALUES ('To Do', null, 'orange', 'JzTmVqCnyT');
-INSERT INTO `status` (`name`, `description`, `color`, board_id) VALUES ('Doing', 'Being worked on','blue', '9hZkPj2sBw');
-INSERT INTO `status` (`name`, `description`, `color`, board_id) VALUES ('Done', 'Finished','green', '9hZkPj2sBw');
+INSERT INTO `status` (`name`, `description`, `color`, board_id) VALUES ('Doing', 'Being worked on','blue', 'JzTmVqCnyT');
+INSERT INTO `status` (`name`, `description`, `color`, board_id) VALUES ('Done', 'Finished','green', 'JzTmVqCnyT');
 
 INSERT INTO tasks (title, description, assignees, createdOn, updatedOn, status_id, board_id) VALUES
 ('TaskTitle1TaskTitle2TaskTitle3TaskTitle4TaskTitle5TaskTitle6TaskTitle7TaskTitle8TaskTitle9TaskTitle0',
