@@ -1,9 +1,10 @@
-version: "3"
+version: "3.8"
 services:
   frontend:
     build: ./frontend
     restart: always
     ports:
+      - "443:443"
       - "80:80"
     environment:
       TZ: "UTC"
@@ -12,14 +13,21 @@ services:
     image: maven:3-openjdk-17
     restart: always
     ports:
-      - "8080:8080"
+      - "8443:8443"
     volumes:
       - ./backend/target/deploy.jar:/app/deploy.jar
+      - ./backend/keystore.p12:/app/keystore.p12
     environment:
-      TZ: "UTC"
-      SPRING_DATASOURCE_kanbanboard_URL: "jdbc:mysql://database:3306/kanbanboard?serverTimezone=UTC"
-      SPRING_DATASOURCE_kanbanboard_USERNAME: "${AUTHEN}"
-      SPRING_DATASOURCE_kanbanboard_PASSWORD: "${TOKEN}"
+      - TZ=UTC
+      - server.port=8443
+      - server.ssl.key-store=/app/keystore.p12
+      - server.ssl.key-store-password=
+      - server.ssl.keyStoreType=
+      - server.ssl.key-alias=
+      - server.ssl.enabled=true
+      - spring.datasource.kanbanboard.jdbc-url=jdbc:mysql://database:3306/kanbanboard?serverTimezone=UTC
+      - spring.datasource.kanbanboard.username=
+      - spring.datasource.kanbanboard.password=
     entrypoint: ["java", "-jar", "/app/deploy.jar"]
     depends_on:
       database:
