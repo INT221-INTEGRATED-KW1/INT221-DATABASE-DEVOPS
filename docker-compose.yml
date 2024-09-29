@@ -3,28 +3,34 @@ services:
   frontend:
     build: ./frontend
     restart: always
-    ports:
-      - "443:443"
-      - "80:80"
     environment:
       TZ: "UTC"
+    networks:
+      - full_link
+  
+  reverse_proxy:
+    image: nginx:alpine
+    ports: 
+        - "80:80"
+        - "443:443"
+    volumes:
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+      - ./certificateFiles/privatekey.pem:/ssl/privatekey.pem
+      - ./certificateFiles/fullchain.pem:/ssl/fullchain.pem
+      - ./certificateFiles/dhparam-2048.pem:/ssl/dhparam-2048.pem
+    restart: always
+    networks:
+      - full_link
 
   backend:
     image: maven:3-openjdk-17
     restart: always
     ports:
-      - "8443:8443"
+      - "8080:8080"
     volumes:
       - ./backend/target/deploy.jar:/app/deploy.jar
-      - ./backend/keystore.p12:/app/keystore.p12
     environment:
       - TZ=UTC
-      - server.port=8443
-      - server.ssl.key-store=/app/keystore.p12
-      - server.ssl.key-store-password=
-      - server.ssl.keyStoreType=
-      - server.ssl.key-alias=
-      - server.ssl.enabled=true
       - spring.datasource.kanbanboard.jdbc-url=jdbc:mysql://database:3306/kanbanboard?serverTimezone=UTC
       - spring.datasource.kanbanboard.username=
       - spring.datasource.kanbanboard.password=
@@ -33,7 +39,7 @@ services:
       database:
         condition: service_healthy
     networks:
-      - backbase_link
+      - full_link
 
   database:
     image: mysql/mysql-server:8.0
@@ -50,7 +56,7 @@ services:
       - ./database/kanbanboard.sql:/docker-entrypoint-initdb.d/kanbanboard.sql
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
     networks:
-      - backbase_link
+      - full_link
 
 networks:
-  backbase_link:
+  full_link:
