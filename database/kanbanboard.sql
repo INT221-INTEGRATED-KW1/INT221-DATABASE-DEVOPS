@@ -11,6 +11,8 @@ DROP TABLE IF exists tasks;
 DROP TABLE IF exists boards;
 DROP TABLE IF exists refresh_token;
 
+GRANT ALL PRIVILEGES ON kanbanboard.* TO 'student'@'%' WITH GRANT OPTION;
+
 CREATE TABLE IF NOT EXISTS `boards` (
   `board_id` VARCHAR(10) NOT NULL UNIQUE,
   `oid` VARCHAR(36) NOT NULL,
