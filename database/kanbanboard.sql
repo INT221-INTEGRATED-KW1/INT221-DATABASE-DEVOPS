@@ -6,19 +6,39 @@ SET GLOBAL time_zone = '+00:00';
 
 USE kanbanboard;
 
+DROP TABLE IF exists users_own;
 DROP TABLE IF exists status;
 DROP TABLE IF exists tasks;
 DROP TABLE IF exists boards;
 DROP TABLE IF exists refresh_token;
+DROP TABLE IF exists collaborators;
 
 GRANT ALL PRIVILEGES ON kanbanboard.* TO 'student'@'%' WITH GRANT OPTION;
+
+CREATE TABLE IF NOT EXISTS `users_own` (
+  `oid` VARCHAR(36) NOT NULL UNIQUE,
+  `name` VARCHAR(100) NOT NULL,
+  `username` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(50) NOT NULL,
+  createdOn DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updatedOn DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE NOW() NOT NULL,
+  PRIMARY KEY (`oid`), 
+    CHECK (name <> ''),
+	CHECK (username <> ''),
+	CHECK (email <> '')
+  )
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
 CREATE TABLE IF NOT EXISTS `boards` (
   `board_id` VARCHAR(10) NOT NULL UNIQUE,
   `oid` VARCHAR(36) NOT NULL,
   `board_name` VARCHAR(120) NOT NULL,
   limitMaximumStatus BOOLEAN DEFAULT FALSE,
-  visibility VARCHAR(10) DEFAULT "private",
+  visibility VARCHAR(10) NOT NULL DEFAULT "PRIVATE",
+  createdOn DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  updatedOn DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE NOW() NOT NULL,
   PRIMARY KEY (`board_id`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -72,6 +92,30 @@ CREATE TABLE tasks (
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+CREATE TABLE IF NOT EXISTS `collaborators` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `board_id` VARCHAR(10) NOT NULL,
+  `oid` VARCHAR(36) NOT NULL,
+  `name` VARCHAR(100) NOT NULL,   -- Adding collaborator's name
+  `email` VARCHAR(50) NOT NULL,   -- Adding collaborator's email
+  `access_right` ENUM('READ', 'WRITE') NOT NULL DEFAULT 'READ',   -- READ or WRITE access
+  `addedOn` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,   -- Date when collaborator was added
+  INDEX `fk_collaborators_boards_idx` (`board_id` ASC),
+  CONSTRAINT `fk_collaborators_boards`
+    FOREIGN KEY (`board_id`)
+    REFERENCES `boards` (`board_id`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION,
+  INDEX `fk_collaborators_users_idx` (`oid` ASC),
+  CONSTRAINT `fk_collaborators_users`
+    FOREIGN KEY (`oid`)
+    REFERENCES `users_own` (`oid`)
+    ON DELETE CASCADE
+    ON UPDATE NO ACTION
+) ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
+
 CREATE TABLE IF NOT EXISTS `refresh_token` (
   id INT AUTO_INCREMENT PRIMARY KEY,
   `token` VARCHAR(255) NOT NULL,
@@ -83,14 +127,15 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
-INSERT INTO boards (board_id, oid, board_name) VALUES
-('JzTmVqCnyT', '2b2f94fd-68be-4ff2-8c67-cb35e139f6fb','job list'),
-('9hZkPj2sBw', '995a830b-6c62-45e6-ab89-1077dff55a72','home work');
+INSERT INTO boards (board_id, oid, board_name, limitMaximumStatus) VALUES
+('JzTmVqCnyT', '2b2f94fd-68be-4ff2-8c67-cb35e139f6fb','job list', FALSE),
+('9hZkPj2sBw', '995a830b-6c62-45e6-ab89-1077dff55a72','home work', FALSE),
+('9hZkddddds', '995a830b-6c62-45e6-ab89-1077dff55a72','test work', FALSE);
 
 INSERT INTO `status` (`name`, `description`,`color`, board_id) VALUES ('No Status', 'The default status','gray', 'JzTmVqCnyT');
 INSERT INTO `status` (`name`, `description`,`color`, board_id) VALUES ('To Do', null, 'orange', 'JzTmVqCnyT');
-INSERT INTO `status` (`name`, `description`, `color`, board_id) VALUES ('Doing', 'Being worked on','blue', 'JzTmVqCnyT');
-INSERT INTO `status` (`name`, `description`, `color`, board_id) VALUES ('Done', 'Finished','green', 'JzTmVqCnyT');
+INSERT INTO `status` (`name`, `description`, `color`, board_id) VALUES ('Doing', 'Being worked on','blue', '9hZkPj2sBw');
+INSERT INTO `status` (`name`, `description`, `color`, board_id) VALUES ('Done', 'Finished','green', '9hZkPj2sBw');
 
 INSERT INTO tasks (title, description, assignees, createdOn, updatedOn, status_id, board_id) VALUES
 ('TaskTitle1TaskTitle2TaskTitle3TaskTitle4TaskTitle5TaskTitle6TaskTitle7TaskTitle8TaskTitle9TaskTitle0',
